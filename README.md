@@ -7,19 +7,19 @@ More detailed README coming soon.
 
 For the moment, if you're using CMake, simply add this Git project as a submodule (say into _vendor/wsse-cpp_) and then add it as a subdirectory in your CMake project:
 
-```lang=cmake
+```cmake
 add_subdirectory(vendor/wsse-cpp)
 ```
 
 You can then link against this library:
 
-```lang=cmake
+```cmake
 target_link_libraries (MY_APPLICATION wsse-cpp)
 ```
 
 ## Examples
 
-```lang=cpp
+```c++
 #import <iostream>
 #import "wsse.hpp"
 
