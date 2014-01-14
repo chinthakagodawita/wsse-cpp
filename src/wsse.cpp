@@ -87,10 +87,6 @@ void Wsse::generate_parts(bool reset) {
   if (this->digest.empty() || reset) {
     this->digest = sha1_encode(this->nonce + this->timestamp + this->pass);
   }
-
-  cout << "TIME: " << this->timestamp << endl;
-  cout << "NONCE: " << this->nonce << endl;
-  cout << "DIGEST: " << digest << endl;
 };
 
 /**
