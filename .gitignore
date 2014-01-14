@@ -11,3 +11,22 @@
 *.lai
 *.la
 *.a
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Xcode
+*.xcodeproj
+*.build/
+Debug
+Release
+
+# Other OS/IDE/editor artifacts
+*.sublime*
+.DS_Store
+Thumbs.db
