@@ -85,7 +85,7 @@ void Wsse::generate_parts(bool reset) {
     this->nonce_encoded = this->b64_encode(this->nonce);
   }
   if (this->digest.empty() || reset) {
-    this->digest = sha1_encode(this->nonce + this->timestamp + this->pass);
+    this->digest = this->b64_encode(this->sha1_encode(this->nonce + this->timestamp + this->pass));
   }
 };
 
