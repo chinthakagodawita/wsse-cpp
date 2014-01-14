@@ -30,3 +30,14 @@ void Wsse::set_pass(string pass) {
   this->pass = pass;
 };
 
+string Wsse::generate_nonce(void) {
+  string nonce;
+  const char alpha_numeric[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  for (int i = 0; i < 16; ++i) {
+    nonce += alpha_numeric[rand() % (sizeof(alpha_numeric) - 1)];
+  }
+
+  this->nonce = nonce;
+  return this->nonce;
+};
