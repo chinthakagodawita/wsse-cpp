@@ -8,3 +8,25 @@
 //  http://opensource.org/licenses/MIT).
 
 #include "wsse.hpp"
+
+Wsse::Wsse(string user, string pass) {
+  // Seed rand() else it'll always be the same.
+  srand(time(0));
+
+  this->user = user;
+  this->pass = pass;
+};
+
+Wsse::Wsse(void) : Wsse::Wsse("", "") {};
+
+Wsse::~Wsse(void) {
+};
+
+void Wsse::set_user(string user) {
+  this->user = user;
+};
+
+void Wsse::set_pass(string pass) {
+  this->pass = pass;
+};
+
