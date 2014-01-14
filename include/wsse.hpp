@@ -12,6 +12,11 @@
 
 #include <iostream>
 #include <string>
+#include <ctime>
+
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/sha.h>
 
 using namespace std;
 
@@ -30,10 +35,14 @@ public:
 
 private:
   string nonce;
+  string nonce_encoded;
   string timestamp;
+  string digest;
 
   string generate_nonce(void);
   string generate_timestamp(void);
+  string b64_encode(const string& data);
+  string sha1_encode(const string& data);
 
 };
 

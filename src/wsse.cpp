@@ -56,3 +56,81 @@ string Wsse::generate_timestamp(void) {
   this->timestamp = string(buf);
   return this->timestamp;
 };
+/**
+ * Inspired by http://stackoverflow.com/a/5331271/356237.
+ */
+string Wsse::b64_encode(const string& data) {
+  BIO *bio;
+  BIO *b64;
+  int result;
+  char* encoded_data;
+  long length;
+  string encoded;
+
+  // Create a BIO to perform the encoding.
+  b64 = BIO_new(BIO_f_base64());
+  BIO_set_flags(b64,BIO_FLAGS_BASE64_NO_NL);
+
+  // Create a BIO that holds the encoded result.
+  bio = BIO_new(BIO_s_mem()); // create BIO that holds the result
+
+  // Chain 'bio' to 'b64' so that writing to b64 will put the base64-encoded
+  // result in bio.
+  BIO_push(b64, bio);
+
+  // Attempt to encode the data.
+  result = 0;
+  while(true) {
+    result = BIO_write(b64, data.data(), (int)data.size());
+
+    // If we have a non-zero return, something went wrong, check if we should
+    // retry.
+    if (result <= 0) {
+      if (BIO_should_retry(b64)) {
+        continue;
+      }
+      else {
+        // @TODO: custom exception.
+        throw std::exception();
+      }
+    }
+    else {
+      break;
+    }
+  }
+
+  // Flush the buffer.
+  BIO_flush(b64);
+
+  // Get a pointer to the encoded data.
+  length = BIO_get_mem_data(bio, &encoded_data);
+
+  // assign data to output
+  encoded = string(encoded_data, length);
+
+  return encoded;
+};
+
+string Wsse::sha1_encode(const string& data) {
+  string encoded;
+  unsigned char digest[SHA_DIGEST_LENGTH];
+  char md_string[SHA_DIGEST_LENGTH * 2 + 1];
+  SHA_CTX ctx;
+
+  // Set context for SHA generator.
+  SHA1_Init(&ctx);
+  // Pass in data to be encoded to context.
+  SHA1_Update(&ctx, data.c_str(), data.size());
+  // Encode.
+  SHA1_Final(digest, &ctx);
+
+  // Convert encoded hex string back into binary.
+  for (int i = 0; i < SHA_DIGEST_LENGTH; ++i) {
+    sprintf(&md_string[i * 2], "%02x", (unsigned int)digest[i]);
+  }
+
+  // Cast to string.
+  encoded = string(md_string);
+
+  return encoded;
+};
