@@ -57,12 +57,13 @@ string Wsse::generate_timestamp(void) {
   return this->timestamp;
 };
 
-string Wsse::get_header(const string profile) {
+string Wsse::get_header(bool reset, const string profile) {
   string header;
 
   // Generate bits if required.
-  this->generate_parts();
+  this->generate_parts(reset);
 
+  // Build header string in the format WSSE expects.
   header = profile +
     " Username=\"" + this->user + "\"," +
     " PasswordDigest=\"" + this->digest + "\"," +

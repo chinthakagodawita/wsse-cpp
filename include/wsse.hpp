@@ -27,7 +27,7 @@ public:
 
   void set_user(string user);
   void set_pass(string pass);
-  string get_header(const string profile = "UsernameToken");
+  string get_header(bool reset = false, const string profile = "UsernameToken");
 
   Wsse(void);
   Wsse(string user, string pass);
