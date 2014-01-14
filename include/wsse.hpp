@@ -43,7 +43,7 @@ private:
   string generate_timestamp(void);
   void generate_parts(bool reset = false);
   string b64_encode(const string& data);
-  string sha1_encode(const string& data);
+  string sha1_encode(const string& data, bool binary = true);
 
 };
 

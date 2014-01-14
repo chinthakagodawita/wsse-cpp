@@ -144,26 +144,27 @@ string Wsse::b64_encode(const string& data) {
   return encoded;
 };
 
-string Wsse::sha1_encode(const string& data) {
+string Wsse::sha1_encode(const string& data, bool binary) {
   string encoded;
-  unsigned char digest[SHA_DIGEST_LENGTH];
+  unsigned char digest[SHA_DIGEST_LENGTH + 1];
   char md_string[SHA_DIGEST_LENGTH * 2 + 1];
-  SHA_CTX ctx;
 
-  // Set context for SHA generator.
-  SHA1_Init(&ctx);
-  // Pass in data to be encoded to context.
-  SHA1_Update(&ctx, data.c_str(), data.size());
-  // Encode.
-  SHA1_Final(digest, &ctx);
+  // Hash input data.
+  SHA1((unsigned char *)data.c_str(), data.size(), digest);
+  digest[SHA_DIGEST_LENGTH] = 0;
 
-  // Convert encoded hex string back into binary.
-  for (int i = 0; i < SHA_DIGEST_LENGTH; ++i) {
-    sprintf(&md_string[i * 2], "%02x", (unsigned int)digest[i]);
+  // Convert encoded binary string back into a normal string if required.
+  if (!binary) {
+    for (int i = 0; i < SHA_DIGEST_LENGTH; ++i) {
+      sprintf((char*)&(md_string[i * 2]), "%02x", (unsigned int)digest[i]);
+    }
+
+    // Cast to string.
+    encoded = string(md_string);
   }
-
-  // Cast to string.
-  encoded = string(md_string);
+  else {
+    encoded = string((char*)digest);
+  }
 
   return encoded;
 };
