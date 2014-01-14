@@ -41,3 +41,18 @@ string Wsse::generate_nonce(void) {
   this->nonce = nonce;
   return this->nonce;
 };
+
+string Wsse::generate_timestamp(void) {
+  time_t now;
+  // ISO-8601 timestamps are 20 chars in length.
+  char buf[21];
+
+  // Current time.
+  time(&now);
+
+  // Get timestamp in ISO-8601 format.
+  strftime(buf, sizeof(buf), "%FT%TZ", gmtime(&now));
+
+  this->timestamp = string(buf);
+  return this->timestamp;
+};
