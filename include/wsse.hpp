@@ -27,7 +27,7 @@ public:
 
   void set_user(string user);
   void set_pass(string pass);
-  string get_auth();
+  string get_header(const string profile = "UsernameToken");
 
   Wsse(void);
   Wsse(string user, string pass);
@@ -41,6 +41,7 @@ private:
 
   string generate_nonce(void);
   string generate_timestamp(void);
+  void generate_parts(bool reset = false);
   string b64_encode(const string& data);
   string sha1_encode(const string& data);
 

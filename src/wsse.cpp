@@ -56,6 +56,42 @@ string Wsse::generate_timestamp(void) {
   this->timestamp = string(buf);
   return this->timestamp;
 };
+
+string Wsse::get_header(const string profile) {
+  string header;
+
+  // Generate bits if required.
+  this->generate_parts();
+
+  header = profile +
+    " Username=\"" + this->user + "\"," +
+    " PasswordDigest=\"" + this->digest + "\"," +
+    " Created=\"" + this->timestamp + "\"," +
+    " Nonce=\"" + this->nonce_encoded + "\"";
+
+  return header;
+};
+
+void Wsse::generate_parts(bool reset) {
+  // Generate all required bits (re-generate if we're told to).
+  if (this->nonce.empty() || reset) {
+    this->generate_nonce();
+  }
+  if (this->timestamp.empty() || reset) {
+    this->generate_timestamp();
+  }
+  if (this->nonce_encoded.empty() || reset) {
+    this->nonce_encoded = this->b64_encode(this->nonce);
+  }
+  if (this->digest.empty() || reset) {
+    this->digest = sha1_encode(this->nonce + this->timestamp + this->pass);
+  }
+
+  cout << "TIME: " << this->timestamp << endl;
+  cout << "NONCE: " << this->nonce << endl;
+  cout << "DIGEST: " << digest << endl;
+};
+
 /**
  * Inspired by http://stackoverflow.com/a/5331271/356237.
  */
